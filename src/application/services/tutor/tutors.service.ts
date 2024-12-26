@@ -1,25 +1,81 @@
-import { Injectable } from "@nestjs/common";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import CreateTutorDTO from "src/application/dtos/create-tutor.dto";
 import { Tutor } from "src/application/interfaces/tutor.interface";
 import { PrismaService } from "src/infra/prisma/prisma.service";
 
 @Injectable()
-export class TutorsService {
+export default class TutorsService {
   constructor(private prismaService: PrismaService) {}
 
-  async createTutor(createTutorDTO: CreateTutorDTO) {
-    const { email, name, password, zip_code } = createTutorDTO;
-
-    const emailAlreadyExists = await this.prismaService.tutor.findUnique({
-      where: { email },
+  async createTutor(createTutorDTO: CreateTutorDTO): Promise<Tutor> {
+    const tutorExists = await this.prismaService.tutor.findUnique({
+      where: {
+        email: createTutorDTO.email,
+      },
     });
 
-    if (emailAlreadyExists) {
-      throw new Error("Email already exists");
+    if (tutorExists) {
+      throw new BadRequestException("Email já está em uso.");
     }
 
-    return this.prismaService.tutor.create({
-      data: { email, name, password, zip_code },
+    const tutor = await this.prismaService.tutor.create({
+      data: {
+        name: createTutorDTO.name,
+        email: createTutorDTO.email,
+        password: createTutorDTO.password,
+        zip_code: createTutorDTO.zip_code,
+        pets: {
+          create: createTutorDTO.pets,
+        },
+      },
+    });
+
+    return {
+      ...tutor,
+      pets: createTutorDTO.pets,
+    };
+  }
+
+  async findAll(): Promise<Tutor[]> {
+    return await this.prismaService.tutor.findMany({
+      include: {
+        pets: true,
+      },
+    });
+  }
+
+  async findById(id: string): Promise<Omit<Tutor, "password">> {
+    if (!id) {
+      throw new BadRequestException("ID é obrigatório.");
+    }
+
+    const tutor = await this.prismaService.tutor.findUnique({
+      where: { id },
+      include: { pets: true },
+    });
+
+    if (!tutor) {
+      throw new NotFoundException("Tutor não encontrado.");
+    }
+
+    const { password, ...result } = tutor;
+    return result;
+  }
+
+  async deleteTutor(id: string): Promise<void> {
+    if (!id) {
+      throw new BadRequestException("Tutor não encontrado.");
+    }
+
+    await this.prismaService.tutor.delete({
+      where: {
+        id,
+      },
     });
   }
 }

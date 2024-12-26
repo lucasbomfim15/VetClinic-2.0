@@ -6,7 +6,7 @@ export interface Tutor {
   email: string;
   password: string;
   zip_code: string;
+  pets: Pet[];
   createdAt: Date;
   updatedAt: Date;
-  pets: Pet[];
 }
