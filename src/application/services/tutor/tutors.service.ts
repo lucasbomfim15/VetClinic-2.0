@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
+import * as bcrypt from "bcryptjs";
 import CreateTutorDTO from "src/application/dtos/create-tutor.dto";
 import UpdateTutorDTO from "src/application/dtos/update-tutor.dto";
 import { Tutor } from "src/application/interfaces/tutor.interface";
@@ -24,11 +25,13 @@ export default class TutorsService {
       throw new BadRequestException("Email já está em uso.");
     }
 
+    const hashedPassword = await bcrypt.hash(createTutorDTO.password, 8);
+
     const tutor = await this.prismaService.tutor.create({
       data: {
         name: createTutorDTO.name,
         email: createTutorDTO.email,
-        password: createTutorDTO.password,
+        password: hashedPassword,
         zip_code: createTutorDTO.zip_code,
         pets: {
           create: createTutorDTO.pets,
