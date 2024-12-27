@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import CreateTutorDTO from "src/application/dtos/create-tutor.dto";
+import UpdateTutorDTO from "src/application/dtos/update-tutor.dto";
 import { Tutor } from "src/application/interfaces/tutor.interface";
 import { PrismaService } from "src/infra/prisma/prisma.service";
 
@@ -77,5 +78,40 @@ export default class TutorsService {
         id,
       },
     });
+  }
+
+  async updateTutor(
+    id: string,
+    updateTutorDTO: UpdateTutorDTO,
+  ): Promise<Omit<Tutor, "password">> {
+    const tutor = await this.prismaService.tutor.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    if (!tutor) {
+      throw new NotFoundException("Tutor não encontrado.");
+    }
+
+    const updatedTutor = await this.prismaService.tutor.update({
+      where: {
+        id,
+      },
+      data: {
+        name: updateTutorDTO.name,
+        email: updateTutorDTO.email,
+        password: updateTutorDTO.password,
+        zip_code: updateTutorDTO.zip_code,
+        pets: {
+          create: updateTutorDTO.pets,
+        },
+      },
+    });
+
+    return {
+      ...updatedTutor,
+      pets: updateTutorDTO.pets,
+    };
   }
 }
