@@ -5,8 +5,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import * as bcrypt from "bcryptjs";
-import CreateTutorDTO from "src/application/dtos/create-tutor.dto";
-import UpdateTutorDTO from "src/application/dtos/update-tutor.dto";
+import CreateTutorDTO from "src/application/dtos/tutors/create-tutor.dto";
+import UpdateTutorDTO from "src/application/dtos/tutors/update-tutor.dto";
 import { Tutor } from "src/application/interfaces/tutor.interface";
 import { PrismaService } from "src/infra/prisma/prisma.service";
 

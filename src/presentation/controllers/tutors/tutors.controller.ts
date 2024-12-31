@@ -9,8 +9,8 @@ import {
   Put,
   UseGuards,
 } from "@nestjs/common";
-import CreateTutorDTO from "src/application/dtos/create-tutor.dto";
-import UpdateTutorDTO from "src/application/dtos/update-tutor.dto";
+import CreateTutorDTO from "src/application/dtos/tutors/create-tutor.dto";
+import UpdateTutorDTO from "src/application/dtos/tutors/update-tutor.dto";
 import { Tutor } from "src/application/interfaces/tutor.interface";
 import TutorsService from "src/application/services/tutor/tutors.service";
 import JwtAuthGuard from "src/presentation/modules/auth/jwt-auth.guard";
