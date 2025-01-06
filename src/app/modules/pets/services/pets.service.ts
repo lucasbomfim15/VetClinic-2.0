@@ -3,10 +3,10 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import CreatePetDTO from "src/application/dtos/pets/create-pet.dto";
-import UpdatePetDTO from "src/application/dtos/pets/update-pet.dto";
-import { Pet } from "src/application/interfaces/pet.interface";
-import { PrismaService } from "src/infra/prisma/prisma.service";
+import CreatePetDTO from "src/app/modules/pets/dtos/create-pet.dto";
+import UpdatePetDTO from "src/app/modules/pets/dtos/update-pet.dto";
+import { Pet } from "src/app/modules/pets/interfaces/pet.interface";
+import { PrismaService } from "src/app/shared/prisma/prisma.service";
 
 @Injectable()
 export default class PetsService {

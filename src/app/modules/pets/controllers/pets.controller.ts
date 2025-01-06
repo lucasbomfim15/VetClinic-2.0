@@ -8,12 +8,12 @@ import {
   Put,
   UseGuards,
 } from "@nestjs/common";
-import CreatePetDTO from "src/application/dtos/pets/create-pet.dto";
-import UpdatePetDTO from "src/application/dtos/pets/update-pet.dto";
-import { Pet } from "src/application/interfaces/pet.interface";
-import PetsService from "src/application/services/pet/pets.service";
-import { PrismaService } from "src/infra/prisma/prisma.service";
-import JwtAuthGuard from "src/presentation/modules/auth/jwt-auth.guard";
+import CreatePetDTO from "src/app/modules/pets/dtos/create-pet.dto";
+import UpdatePetDTO from "src/app/modules/pets/dtos/update-pet.dto";
+import { Pet } from "src/app/modules/pets/interfaces/pet.interface";
+import PetsService from "src/app/modules/pets/services/pets.service";
+import { PrismaService } from "src/app/shared/prisma/prisma.service";
+import JwtAuthGuard from "src/app/modules/auth/jwt/jwt-auth.guard";
 
 @Controller("api/v1/pets")
 export default class PetsController {

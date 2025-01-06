@@ -9,11 +9,11 @@ import {
   Put,
   UseGuards,
 } from "@nestjs/common";
-import CreateTutorDTO from "src/application/dtos/tutors/create-tutor.dto";
-import UpdateTutorDTO from "src/application/dtos/tutors/update-tutor.dto";
-import { Tutor } from "src/application/interfaces/tutor.interface";
-import TutorsService from "src/application/services/tutor/tutors.service";
-import JwtAuthGuard from "src/presentation/modules/auth/jwt-auth.guard";
+import CreateTutorDTO from "src/app/modules/tutors/dtos/create-tutor.dto";
+import UpdateTutorDTO from "src/app/modules/tutors/dtos/update-tutor.dto";
+import { Tutor } from "src/app/modules/tutors/interfaces/tutor.interface";
+import TutorsService from "src/app/modules/tutors/services/tutors.service";
+import JwtAuthGuard from "src/app/modules/auth/jwt/jwt-auth.guard";
 
 @Controller("api/v1/tutors")
 export class TutorsController {
