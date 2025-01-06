@@ -9,9 +9,10 @@ import { Pet } from "src/app/modules/pets/interfaces/pet.interface";
 import { PrismaService } from "src/app/shared/prisma/prisma.service";
 import PetsRepository from "../repository/pets.repository";
 import TutorsRepository from "../../tutors/repository/tutors.repository";
+import { IPetService } from "../interfaces/pet-service-interface";
 
 @Injectable()
-export default class PetsService {
+export default class PetsService implements IPetService {
   constructor(
     private prismaService: PrismaService,
     private readonly petsRepository: PetsRepository,

@@ -3,9 +3,10 @@ import TutorsRepository from "../../tutors/repository/tutors.repository";
 import { PrismaService } from "src/app/shared/prisma/prisma.service";
 import { JwtService } from "@nestjs/jwt";
 import { compare } from "bcryptjs";
+import { IJwtService } from "../interfaces/jwt-service-interface";
 
 @Injectable()
-export default class AuthenticateService {
+export default class AuthenticateService implements IJwtService {
   constructor(
     private readonly tutorsRepository: TutorsRepository,
     private readonly prismaService: PrismaService,

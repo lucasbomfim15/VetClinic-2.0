@@ -14,9 +14,10 @@ import { Pet } from "src/app/modules/pets/interfaces/pet.interface";
 import PetsService from "src/app/modules/pets/services/pets.service";
 import { PrismaService } from "src/app/shared/prisma/prisma.service";
 import JwtAuthGuard from "src/app/modules/auth/jwt/jwt-auth.guard";
+import { IPetController } from "../interfaces/pet-controller-interface";
 
 @Controller("api/v1/pets")
-export default class PetsController {
+export default class PetsController implements IPetController {
   constructor(
     private readonly prismaService: PrismaService,
     private readonly petsService: PetsService,

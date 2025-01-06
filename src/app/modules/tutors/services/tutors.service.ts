@@ -10,9 +10,10 @@ import UpdateTutorDTO from "src/app/modules/tutors/dtos/update-tutor.dto";
 import { Tutor } from "src/app/modules/tutors/interfaces/tutor.interface";
 import { PrismaService } from "src/app/shared/prisma/prisma.service";
 import TutorsRepository from "../repository/tutors.repository";
+import { ITutorService } from "../interfaces/itutor-service-interface";
 
 @Injectable()
-export default class TutorsService {
+export default class TutorsService implements ITutorService {
   constructor(
     private prismaService: PrismaService,
     private readonly tutorsRepository: TutorsRepository,

@@ -14,20 +14,21 @@ import UpdateTutorDTO from "src/app/modules/tutors/dtos/update-tutor.dto";
 import { Tutor } from "src/app/modules/tutors/interfaces/tutor.interface";
 import TutorsService from "src/app/modules/tutors/services/tutors.service";
 import JwtAuthGuard from "src/app/modules/auth/jwt/jwt-auth.guard";
+import { ITutorController } from "../interfaces/itutor-controller-interface";
 
 @Controller("api/v1/tutors")
-export class TutorsController {
+export class TutorsController implements ITutorController {
   constructor(private readonly tutorService: TutorsService) {}
 
   @Post()
   @HttpCode(201)
-  async createTutor(@Body() createTutorDTO: CreateTutorDTO) {
+  async createTutor(@Body() createTutorDTO: CreateTutorDTO): Promise<Tutor> {
     return this.tutorService.createTutor(createTutorDTO);
   }
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async index() {
+  async index(): Promise<Tutor[]> {
     return this.tutorService.findAll();
   }
 
