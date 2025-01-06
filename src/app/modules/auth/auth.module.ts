@@ -6,9 +6,11 @@ import { Env } from "src/env";
 import { PrismaModule } from "src/app/shared/prisma/prisma.module";
 import AuthenticateController from "src/app/modules/auth/controllers/authenticate-controller";
 import JwtStrategy from "./jwt/jwt.strategy";
+import AuthenticateService from "./service/authenticate-service";
+import TutorsRepository from "../tutors/repository/tutors.repository";
 
 @Module({
-  providers: [JwtStrategy],
+  providers: [JwtStrategy, AuthenticateService, TutorsRepository],
   imports: [
     PrismaModule,
     PassportModule,
