@@ -9,17 +9,19 @@ import CreateTutorDTO from "src/app/modules/tutors/dtos/create-tutor.dto";
 import UpdateTutorDTO from "src/app/modules/tutors/dtos/update-tutor.dto";
 import { Tutor } from "src/app/modules/tutors/interfaces/tutor.interface";
 import { PrismaService } from "src/app/shared/prisma/prisma.service";
+import TutorsRepository from "../repository/tutors.repository";
 
 @Injectable()
 export default class TutorsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private readonly tutorsRepository: TutorsRepository,
+  ) {}
 
   async createTutor(createTutorDTO: CreateTutorDTO): Promise<Tutor> {
-    const tutorExists = await this.prismaService.tutor.findUnique({
-      where: {
-        email: createTutorDTO.email,
-      },
-    });
+    const tutorExists = await this.tutorsRepository.findTutorByEmail(
+      createTutorDTO.email,
+    );
 
     if (tutorExists) {
       throw new BadRequestException("Email já está em uso.");
@@ -27,30 +29,11 @@ export default class TutorsService {
 
     const hashedPassword = await bcrypt.hash(createTutorDTO.password, 8);
 
-    const tutor = await this.prismaService.tutor.create({
-      data: {
-        name: createTutorDTO.name,
-        email: createTutorDTO.email,
-        password: hashedPassword,
-        zip_code: createTutorDTO.zip_code,
-        pets: {
-          create: createTutorDTO.pets,
-        },
-      },
-    });
-
-    return {
-      ...tutor,
-      pets: createTutorDTO.pets,
-    };
+    return this.tutorsRepository.createTutor(createTutorDTO, hashedPassword);
   }
 
   async findAll(): Promise<Tutor[]> {
-    return await this.prismaService.tutor.findMany({
-      include: {
-        pets: true,
-      },
-    });
+    return await this.tutorsRepository.findAllTutors();
   }
 
   async findById(id: string): Promise<Omit<Tutor, "password">> {
@@ -58,10 +41,7 @@ export default class TutorsService {
       throw new BadRequestException("ID é obrigatório.");
     }
 
-    const tutor = await this.prismaService.tutor.findUnique({
-      where: { id },
-      include: { pets: true },
-    });
+    const tutor = await this.tutorsRepository.findTutorById(id);
 
     if (!tutor) {
       throw new NotFoundException("Tutor não encontrado.");
@@ -73,7 +53,13 @@ export default class TutorsService {
 
   async deleteTutor(id: string): Promise<void> {
     if (!id) {
-      throw new BadRequestException("Tutor não encontrado.");
+      throw new BadRequestException("ID é obrigatório.");
+    }
+
+    const tutor = await this.tutorsRepository.findTutorById(id);
+
+    if (!tutor) {
+      throw new NotFoundException("Tutor não encontrado.");
     }
 
     await this.prismaService.tutor.delete({
@@ -87,30 +73,16 @@ export default class TutorsService {
     id: string,
     updateTutorDTO: UpdateTutorDTO,
   ): Promise<Omit<Tutor, "password">> {
-    const tutor = await this.prismaService.tutor.findUnique({
-      where: {
-        id,
-      },
-    });
+    const tutor = await this.tutorsRepository.findTutorById(id);
 
     if (!tutor) {
       throw new NotFoundException("Tutor não encontrado.");
     }
 
-    const updatedTutor = await this.prismaService.tutor.update({
-      where: {
-        id,
-      },
-      data: {
-        name: updateTutorDTO.name,
-        email: updateTutorDTO.email,
-        password: updateTutorDTO.password,
-        zip_code: updateTutorDTO.zip_code,
-        pets: {
-          create: updateTutorDTO.pets,
-        },
-      },
-    });
+    const updatedTutor = await this.tutorsRepository.updateTutor(
+      id,
+      updateTutorDTO,
+    );
 
     return {
       ...updatedTutor,
