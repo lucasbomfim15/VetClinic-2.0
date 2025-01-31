@@ -45,7 +45,7 @@ export default class PetsService implements IPetService {
     const pet = await this.petsRepository.findById(id);
 
     if (!pet) {
-      throw new NotFoundException("Pet não encontrado.");
+      throw new NotFoundException("Pet not found");
     }
 
     return pet;
@@ -59,7 +59,7 @@ export default class PetsService implements IPetService {
     const pet = await this.petsRepository.findById(id);
 
     if (!pet) {
-      throw new NotFoundException("Pet não encontrado.");
+      throw new NotFoundException("Pet not found");
     }
 
     await this.petsRepository.deletePetById(id);

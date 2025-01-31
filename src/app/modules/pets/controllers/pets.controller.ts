@@ -43,10 +43,10 @@ export default class PetsController implements IPetController {
 
   @Delete(":id")
   @UseGuards(JwtAuthGuard)
-  async delete(@Param("id") id: string): Promise<void> {
-    await this.prismaService.pet.delete({
-      where: { id },
-    });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async delete(@Param("id") id: string): Promise<void | any> {
+    await this.petsService.deleteById(id);
+    return { statusCode: 204, message: "Pet deleted successfully" };
   }
 
   @Put(":id")
