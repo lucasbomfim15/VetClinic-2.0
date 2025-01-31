@@ -45,7 +45,7 @@ export default class TutorsService implements ITutorService {
     const tutor = await this.tutorsRepository.findTutorById(id);
 
     if (!tutor) {
-      throw new NotFoundException("Tutor não encontrado.");
+      throw new NotFoundException("Tutor not found");
     }
 
     const { password, ...result } = tutor;
@@ -60,14 +60,10 @@ export default class TutorsService implements ITutorService {
     const tutor = await this.tutorsRepository.findTutorById(id);
 
     if (!tutor) {
-      throw new NotFoundException("Tutor não encontrado.");
+      throw new NotFoundException("Tutor not found");
     }
 
-    await this.prismaService.tutor.delete({
-      where: {
-        id,
-      },
-    });
+    await this.tutorsRepository.deleteTutorById(id);
   }
 
   async updateTutor(

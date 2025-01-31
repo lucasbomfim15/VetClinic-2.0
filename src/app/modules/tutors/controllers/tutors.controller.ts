@@ -40,8 +40,10 @@ export class TutorsController implements ITutorController {
 
   @Delete(":id")
   @UseGuards(JwtAuthGuard)
-  async delete(@Param("id") id: string): Promise<void> {
-    return this.tutorService.deleteTutor(id);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async delete(@Param("id") id: string): Promise<void | any> {
+    await this.tutorService.deleteTutor(id);
+    return { statusCode: 204, message: "Tutor deleted successfully" };
   }
 
   @Put(":id")

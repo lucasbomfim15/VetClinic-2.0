@@ -33,6 +33,14 @@ export default class TutorsRepository {
     });
   }
 
+  async deleteTutorById(id: string): Promise<void> {
+    await this.prismaService.tutor.delete({
+      where: {
+        id,
+      },
+    });
+  }
+
   async createTutor(
     createTutorDto: CreateTutorDTO,
     hashedPassword: string,
